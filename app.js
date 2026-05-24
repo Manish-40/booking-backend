@@ -1,6 +1,7 @@
 const express=require("express");
 const pool=require("./config/db")
 const userRouter=require("./routes/userRoutes");
+const movieRouter=require("./routes/movieRoutes");
 const app=express();
 app.use(express.json());
 
@@ -35,7 +36,23 @@ app.get("/create-users-table", async (req, res) => {
     res.status(500).send("Error creating users table");
   }
 });
+app.get("/create-movies-table",async(req,res)=>{
+  try
+  {
+  await pool.query(`CREATE TABLE movies (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(200),
+    image TEXT,
+    price INT)`)
+}
+catch(error)
+{
+  console.log(error);
+  res.status(500).send("error creating movies table");
+}
+});
 app.use("/",userRouter);
+app.use("/movies",movieRouter);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

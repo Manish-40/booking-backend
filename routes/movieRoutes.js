@@ -1,0 +1,17 @@
+const express=require("express");
+const pool=require("../config/db");
+const route=express.Router();
+route.get("/search",async(req,res)=>{
+    try
+    {
+        const search=req.query.q;
+        const result=await pool.query("SELECT * FROM movies WHERE title ILIKE $1",[`${search}%`]);
+        res.json(result.rows);
+    }
+    catch(error)
+    {
+        console.log(error);
+        res.status(500).send("search error");
+    }
+});
+module.exports=router;
