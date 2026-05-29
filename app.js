@@ -6,8 +6,10 @@ const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
+require('dotenv').config()
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "process.env.FRONTEND_URL",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   credentials: true
 }));
 app.use(express.json());
