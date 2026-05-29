@@ -1,7 +1,7 @@
 const express=require("express");
 const pool=require("../config/db");
-const route=express.Router();
-route.get("/search",async(req,res)=>{
+const router=express.Router();
+router.get("/search",async(req,res)=>{
     try
     {
         const search=req.query.q;
