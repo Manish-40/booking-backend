@@ -49,10 +49,18 @@ app.get("/create-movies-table", async (req, res) => {
   try {
     await pool.query(`CREATE TABLE movies (
     id SERIAL PRIMARY KEY,
-    title VARCHAR(200),
+    title VARCHAR(200) NOT NULL,
     image TEXT,
-    price INT)`)
+    description TEXT,
+    language VARCHAR(50),
+    genre VARCHAR(100),
+    duration VARCHAR(20),
+    price INT,
+    release_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`)
     res.send("movies table created");
+
   }
   catch (error) {
     console.log(error);
@@ -62,11 +70,29 @@ app.get("/create-movies-table", async (req, res) => {
 app.get("/addmovies", async (req, res) => {
   try {
     await pool.query(
-      `INSERT INTO movies(title,image,price) VALUES
-    ('Dhurandhar','Dhurandhar.jpg',250),
-    ('Don','Don.jpg',300),
-    ('Dhoom','Dhoom.jpg',350),
-    ('Avengers','Avengers.jpg',400)`,
+      `INSERT INTO movies
+(title, image, description, language, genre, duration, price, release_date)
+VALUES
+(
+  'Dhurandhar',
+  'https://example.com/dhurandhar.jpg',
+  'Action thriller movie',
+  'Hindi',
+  'Action',
+  '3h 30m',
+  250,
+  '2025-12-5'
+),
+(
+  'Dhurandhar the revenge',
+  'https://example.com/dhurandhar the revenge.jpg',
+  'Action thriller movie',
+  'Hindi',
+  'Action',
+  '3h 30m',
+  250,
+  '2026-3-19'
+);`,
     )
     res.send("movies added successfully");
   }
@@ -78,6 +104,7 @@ app.get("/addmovies", async (req, res) => {
 });
 app.use("/", userRouter);
 app.use("/movies", movieRouter);
+app.use("/", movieRouter);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
